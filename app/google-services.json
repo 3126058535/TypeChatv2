@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "885346380639",
+    "project_id": "type-chat-v2",
+    "storage_bucket": "type-chat-v2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885346380639:android:ba1d376e9216e5e97f64ea",
+        "android_client_info": {
+          "package_name": "cn.henu.typechatv2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTQ7F7odPWNXfU53RFM-GNtyXPm6RVV9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

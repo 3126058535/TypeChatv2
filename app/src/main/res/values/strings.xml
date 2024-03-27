@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">TypeChatv2</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="input_email">input email</string>
+    <string name="sign_in">sign in</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="upload_image">upload image</string>
+    <string name="input_name">input name</string>
+    <string name="input_password">input password</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="sign_up">sign up</string>
+    <string name="select_user">Select User</string>
+    <string name="no_user_found">No user found</string>
+    <string name="type_a_message">type a message</string>
+    <string name="online">online</string>
+    <string name="select_group">select group</string>
+    <string name="create_an_group_chat">create an group chat</string>
+    <string name="create_group_chat">Create Group Chat</string>
+    <string name="input_group_info">input group info</string>
+    <string name="add_members">Add Members</string>
+</resources>
