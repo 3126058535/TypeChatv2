@@ -27,7 +27,6 @@ import java.util.List;
 
 import cn.henu.typechatv2.adapter.RecentConversionAdapter;
 import cn.henu.typechatv2.databinding.ActivityMainBinding;
-import cn.henu.typechatv2.databinding.ActivitySignInBinding;
 import cn.henu.typechatv2.listeners.ConversionListener;
 import cn.henu.typechatv2.models.ChatMessage;
 import cn.henu.typechatv2.models.User;
@@ -65,7 +64,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         binding.fabNewUser.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), UserActivity.class)));
         binding.buttonToGroupChat.setOnClickListener(v ->
-                startActivity(new Intent(getApplicationContext(), GroupChatActivity.class)));
+                startActivity(new Intent(getApplicationContext(), GroupActivity.class)));
     }
 
     private void loadUserDetails() {

@@ -27,14 +27,18 @@ public class Constants {
     public static final String LAST_MESSAGE = "lastMessage";
     public static final String USER_AVAILABILITY = "userAvailability";
     // Constants.java
-    public static final String GROUP_CHAT_COLLECTION = "groupChats";
+    public static final String GROUP_CHAT_COLLECTION = "groupchats";
+    public static final String GROUP_COLLECTION = "groups";
+    public static final String GROUP = "group";
     public static final String GROUP_CHAT_MEMBERS = "members";
     public static final String GROUP_CHAT_NAME = "groupName";
-    public static final String GROUP_CHAT_MESSAGES = "messages";
+    public static final String GROUP_CHAT_MESSAGES = "groupMessages";
     public static final String GROUP_CHAT_IMAGE = "groupImage";
     public static final String GROUP_CHAT_CREATED_BY = "created_by";
     public static final String GROUP_CHAT_TIMESTAMP = "timestamp";
     public static final String GROUP_CHAT_ID = "group_chat_id";
+
+
 
 
 

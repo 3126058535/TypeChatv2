@@ -69,17 +69,17 @@ public class UserActivity extends BaseActivity implements UserListener{
                     }
                 });
     }
-    private void showErrorMessage(){
-        binding.textNoUserFound.setVisibility(View.VISIBLE);
-    }
-    private void loading (Boolean isLoading){
-        if (isLoading){
-            binding.progressBar.setVisibility(View.VISIBLE);
-        }else{
-            binding.progressBar.setVisibility(View.GONE);
+        private void showErrorMessage(){
+            binding.textNoUserFound.setVisibility(View.VISIBLE);
         }
+        private void loading (Boolean isLoading){
+            if (isLoading){
+                binding.progressBar.setVisibility(View.VISIBLE);
+            }else{
+                binding.progressBar.setVisibility(View.GONE);
+            }
 
-    }
+        }
 
     @Override
     public void onUserClicked(User user) {

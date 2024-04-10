@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/select_user"
+        android:text="@string/select_group"
         android:textColor="@color/white"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageBack">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userRecyclerView"
+            android:id="@+id/groupRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -68,9 +68,12 @@
             android:textSize="@dimen/_14ssp"
             android:visibility="gone"/>
 
+
+
     </FrameLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/confirm_button"
+        android:id="@+id/button_create_group_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_24sdp"

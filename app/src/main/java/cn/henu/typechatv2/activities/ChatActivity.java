@@ -148,6 +148,7 @@ public class ChatActivity extends BaseActivity {
                 .addSnapshotListener(eventListener);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
         if (error != null) {
             return;
@@ -187,8 +188,6 @@ public class ChatActivity extends BaseActivity {
             checkForConversion();
         }
     };
-
-
     private Bitmap getReceiverProfileImage() {
         byte[] bytes = Base64.decode(receiverUser.image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
