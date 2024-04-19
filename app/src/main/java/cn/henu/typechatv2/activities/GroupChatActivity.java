@@ -6,10 +6,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -32,7 +36,6 @@ import cn.henu.typechatv2.utilities.PreferenceManager;
 public class GroupChatActivity extends AppCompatActivity {
     ActivityGroupChatBinding binding;
     private Group receiverGroup;
-    private User receiverUser;
     private List<ChatMessage> chatMessages;
     private GroupChatAdapter chatAdapter;
     private PreferenceManager preferenceManager;
@@ -59,38 +62,43 @@ public class GroupChatActivity extends AppCompatActivity {
         binding.chatRecyclerView.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
     }
+
     private void sendMessage() {
+        String inputMessage = binding.inputMessage.getText().toString();
+        if (inputMessage.trim().isEmpty()) {
+            Toast.makeText(GroupChatActivity.this, "Message cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+//        if (!isCurrentUserGroupMember()) {
+//            Toast.makeText(GroupChatActivity.this, "You are not a member of this group", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         HashMap<String, Object> message = new HashMap<>();
         message.put(Constants.SENDER_ID, preferenceManager.getString(Constants.USER_ID));
         message.put(Constants.GROUP_CHAT_ID, receiverGroup.id);
         message.put(Constants.MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.TIMESTAMP, System.currentTimeMillis());
+        //message.put(Constants.MESSAGE_TYPE, Constants.MESSAGE_TYPE_TEXT);
+        message.put(Constants.IS_GROUP_CONVERSATION, true);
         database.collection(Constants.GROUP_CHAT_COLLECTION).add(message);
 //        if (conversionId != null) {
 //            updateConversion(binding.inputMessage.getText().toString());
 //        } else {
 //            HashMap<String, Object> conversion = new HashMap<>();
 //            conversion.put(Constants.SENDER_ID, preferenceManager.getString(Constants.USER_ID));
-//            conversion.put(Constants.RECEIVER_ID, receiverUser.id);
+//            conversion.put(Constants.GROUP_CHAT_ID, receiverGroup.id);
 //            conversion.put(Constants.SENDER_NAME, preferenceManager.getString(Constants.USER_NAME));
-//            conversion.put(Constants.RECEIVER_NAME, receiverUser.name);
+//            conversion.put(Constants.RECEIVER_NAME, receiverGroup.groupname);
 //            conversion.put(Constants.SENDER_IMAGE, preferenceManager.getString(Constants.USER_IMAGE));
-//            conversion.put(Constants.RECEIVER_IMAGE, receiverUser.image);
+//            conversion.put(Constants.RECEIVER_IMAGE, receiverGroup.image);
 //            conversion.put(Constants.LAST_MESSAGE, binding.inputMessage.getText().toString());
+//            conversion.put(Constants.IS_GROUP_CONVERSATION, true);
 //            conversion.put(Constants.TIMESTAMP, new Date());
 //            addConversion(conversion);
 //        }
         binding.inputMessage.setText(null);
     }
-    private Bitmap getmemberImage() {
-        //再GROUP_CHAT_COLLECTION中查找receiverGroup.id对应的文档，将其中的senderId字段的值赋给receiverUser
-        //receiverUser = new User();
-        //receiverUser.id = database.collection(Constants.GROUP_CHAT_COLLECTION).document(receiverGroup.id).get().getResult().getString(Constants.SENDER_ID);
-        //再通过receiverUser查找USER_COLLECTION中对应的文档，将其中的image字段的值赋给receiverUser
-        //receiverUser.image = database.collection(Constants.USERS_COLLECTION).document(receiverUser.id).get().getResult().getString(Constants.USER_IMAGE);
-        byte[] bytes = Base64.decode(receiverGroup.image, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
+
     private void listenMessages() {
         database.collection(Constants.GROUP_CHAT_COLLECTION)
                 .whereEqualTo(Constants.GROUP_CHAT_ID, receiverGroup.id)
@@ -132,9 +140,9 @@ public class GroupChatActivity extends AppCompatActivity {
         }
         binding.progressBar.setVisibility(View.GONE);
 //        Log.d("ChatActivity", "************\nsendMessage2: " + conversionId);
-//        if (conversionId == null) {
-//            checkForConversion();
-//        }
+        if (conversionId == null) {
+            checkForConversion();
+        }
     };
     private String getReadableDateTime(Date date) {
         return new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault()).format(date);
@@ -144,7 +152,54 @@ public class GroupChatActivity extends AppCompatActivity {
         assert receiverGroup != null;
         binding.textName.setText(receiverGroup.groupname);
     }
+//    private boolean isCurrentUserGroupMember() {
+//        List<String> members = (List<String>) database.collection(Constants.GROUP_COLLECTION)
+//                .document(receiverGroup.id)
+//                .get()
+//                .getResult()
+//                .get(Constants.GROUP_CHAT_MEMBERS);
+//        String currentUserId = preferenceManager.getString(Constants.USER_ID);
+//        return members.contains(currentUserId);
+//    }
+    private void checkForConversion() {
+        if (!chatMessages.isEmpty()) {
+            checkForConversionRemotely(
+                    receiverGroup.id
+            );
+        }
+    }
+    private void addConversion(HashMap<String, Object> conversion) {
+        database.collection(Constants.COLLECTION_CONVERSIONS)
+                .add(conversion)
+                .addOnSuccessListener(
+                        documentReference -> {
+                            conversionId = documentReference.getId();
+                        }
+                );
+    }
 
+    private void updateConversion(String message) {
+        DocumentReference documentReference =
+                database.collection(Constants.COLLECTION_CONVERSIONS)
+                        .document(conversionId);
+        documentReference.update(
+                Constants.LAST_MESSAGE, message,
+                Constants.TIMESTAMP, new Date()
+        );
+
+    }
+    private void checkForConversionRemotely(String receiverId) {
+        database.collection(Constants.COLLECTION_CONVERSIONS)
+                .whereEqualTo(Constants.GROUP_CHAT_ID, receiverId)
+                .get()
+                .addOnCompleteListener(conversionCompleteListener);
+    }
+    private final OnCompleteListener<QuerySnapshot> conversionCompleteListener = task -> {
+        if (task.isSuccessful() && task.getResult() != null && !task.getResult().getDocuments().isEmpty()) {
+            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+            conversionId = documentSnapshot.getId();
+        }
+    };
     private void setlisteners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
         binding.layoutsend.setOnClickListener(v -> sendMessage());

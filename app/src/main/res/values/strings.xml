@@ -19,4 +19,9 @@
     <string name="create_group_chat">Create Group Chat</string>
     <string name="input_group_info">input group info</string>
     <string name="add_members">Add Members</string>
+    <string name="confirm_code">confirm code</string>
+    <string name="confirm">Confirm</string>
+    <string name="id">ID:</string>
+    <string name="logout">logout</string>
+    <string name="info">This is a cool app that lets you chat with friends.This is a cool app that lets you chat with friends.This is a cool app that lets you chat with friends.</string>
 </resources>

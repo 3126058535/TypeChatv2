@@ -29,6 +29,7 @@ import cn.henu.typechatv2.adapter.RecentConversionAdapter;
 import cn.henu.typechatv2.databinding.ActivityMainBinding;
 import cn.henu.typechatv2.listeners.ConversionListener;
 import cn.henu.typechatv2.models.ChatMessage;
+import cn.henu.typechatv2.models.Group;
 import cn.henu.typechatv2.models.User;
 import cn.henu.typechatv2.utilities.Constants;
 import cn.henu.typechatv2.utilities.PreferenceManager;
@@ -60,12 +61,17 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     }
 
     private void setlisteners() {
-        binding.imageLogout.setOnClickListener(v -> signout());
+        binding.imageLogout.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), ShowAPP.class)));
         binding.fabNewUser.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), UserActivity.class)));
         binding.buttonToGroupChat.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), GroupActivity.class)));
+        Intent intent = new Intent(this, UserInfo.class);
+        intent.putExtra(Constants.USER_ID, preferenceManager.getString(Constants.USER_ID)); // userId 是你要显示的用户的ID
+        binding.imageProfile.setOnClickListener(v ->
+                startActivity(intent));
     }
+
 
     private void loadUserDetails() {
         binding.textName.setText(preferenceManager.getString(Constants.USER_NAME));
@@ -113,6 +119,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.TIMESTAMP);
                     conversations.add(chatMessage);
                 } else if( documentChange.getType() == DocumentChange.Type.MODIFIED){
+
                     for(int i = 0; i < conversations.size(); i++){
                         String senderId = documentChange.getDocument().getString(Constants.SENDER_ID);
                         String receiverId = documentChange.getDocument().getString(Constants.RECEIVER_ID);
@@ -157,27 +164,34 @@ public class MainActivity extends BaseActivity implements ConversionListener {
                 .addOnFailureListener(e -> showToast("Unable to update token"));
     }
 
-    private void signout(){
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        DocumentReference documentReference =
-                database.collection(Constants.USERS_COLLECTION).document(
-                        preferenceManager.getString(Constants.USER_ID)
-                );
-        HashMap<String, Object> updates = new HashMap<>();
-        updates.put(Constants.FCM_TOKEN, FieldValue.delete());
-        documentReference.update(updates)
-                .addOnSuccessListener(unused -> {
-                    preferenceManager.clearPreferences();
-                    startActivity(new Intent(getApplicationContext(), SignInActivity.class));
-                    finish();
-                })
-                .addOnFailureListener(e -> showToast("Unable to sign out"));
+//    private void signout(){
+//        FirebaseFirestore database = FirebaseFirestore.getInstance();
+//        DocumentReference documentReference =
+//                database.collection(Constants.USERS_COLLECTION).document(
+//                        preferenceManager.getString(Constants.USER_ID)
+//                );
+//        HashMap<String, Object> updates = new HashMap<>();
+//        updates.put(Constants.FCM_TOKEN, FieldValue.delete());
+//        documentReference.update(updates)
+//                .addOnSuccessListener(unused -> {
+//                    preferenceManager.clearPreferences();
+//                    startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+//                    finish();
+//                })
+//                .addOnFailureListener(e -> showToast("Unable to sign out"));
+//    }
+
+    @Override
+    public void onUserConversionClicked(User user) {
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
     }
 
     @Override
-    public void onConversionClicked(User user) {
-        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-        intent.putExtra("user", user);
+    public void onGroupConversionClicked(Group group) {
+        Intent intent = new Intent(getApplicationContext(), GroupChatActivity.class);
+        intent.putExtra(Constants.GROUP, group);
         startActivity(intent);
     }
 }

@@ -1,6 +1,5 @@
 package cn.henu.typechatv2.activities;
 
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -16,6 +15,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 
 import androidx.annotation.RequiresApi;
@@ -54,7 +54,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class ChatActivity extends BaseActivity {
     private ActivityChatBinding binding;
     private User receiverUser;
@@ -64,20 +63,22 @@ public class ChatActivity extends BaseActivity {
     private FirebaseFirestore database;
     private String conversionId = null;
     private Boolean isReceiverAvailable = false;
+    private String userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setListeners();
         loadReceiverDetails();
+        setListeners();
+
         init();
         listenMessages();
     }
 
     private void init() {
-        Log.d("ChatActivity", "************\nsendMessage1: " + conversionId);
+        //Log.d("ChatActivity", "************\nsendMessage1: " + conversionId);
         preferenceManager = new PreferenceManager(getApplicationContext());
         chatMessages = new ArrayList<>();
         chatAdapter = new ChatAdapter(
@@ -90,11 +91,17 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void sendMessage() {
+        String inputMessage = binding.inputMessage.getText().toString();
+        if (inputMessage.trim().isEmpty()) {
+            Toast.makeText(ChatActivity.this, "Message cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         HashMap<String, Object> message = new HashMap<>();
         message.put(Constants.SENDER_ID, preferenceManager.getString(Constants.USER_ID));
         message.put(Constants.RECEIVER_ID, receiverUser.id);
         message.put(Constants.MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.TIMESTAMP, System.currentTimeMillis());
+        message.put(Constants.IS_GROUP_CONVERSATION, false);
         database.collection(Constants.CHAT_COLLECTION).add(message);
         if (conversionId != null) {
             updateConversion(binding.inputMessage.getText().toString());
@@ -106,6 +113,7 @@ public class ChatActivity extends BaseActivity {
             conversion.put(Constants.RECEIVER_NAME, receiverUser.name);
             conversion.put(Constants.SENDER_IMAGE, preferenceManager.getString(Constants.USER_IMAGE));
             conversion.put(Constants.RECEIVER_IMAGE, receiverUser.image);
+            conversion.put(Constants.IS_GROUP_CONVERSATION, false);
             conversion.put(Constants.LAST_MESSAGE, binding.inputMessage.getText().toString());
             conversion.put(Constants.TIMESTAMP, new Date());
             addConversion(conversion);
@@ -196,12 +204,18 @@ public class ChatActivity extends BaseActivity {
     private void loadReceiverDetails() {
         receiverUser = (User) getIntent().getSerializableExtra("user");
         assert receiverUser != null;
+        assert receiverUser.id != null;
+        userid = receiverUser.id;
         binding.textName.setText(receiverUser.name);
     }
 
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
         binding.layoutsend.setOnClickListener(v -> sendMessage());
+        Intent intent = new Intent(this, UserInfo.class);
+        intent.putExtra(Constants.USER_ID, userid); // userId 是你要显示的用户的ID
+        binding.imageinfo.setOnClickListener(v ->
+                startActivity(intent));
 
     }
 

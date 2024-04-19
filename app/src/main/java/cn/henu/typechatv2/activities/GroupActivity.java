@@ -35,7 +35,7 @@ public class GroupActivity extends AppCompatActivity implements GroupListener {
 
     private void setListeners() {
         binding.buttonCreateGroupChat.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), CreateGroupChat.class)));
-        binding.imageBack.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), MainActivity.class)));
+        binding.imageBack.setOnClickListener(v -> onBackPressed());
     }
     private void getGroup(){
         loading(true);
@@ -44,13 +44,9 @@ public class GroupActivity extends AppCompatActivity implements GroupListener {
                 .get()
                 .addOnCompleteListener(task -> {
                     loading(false);
-                    String currentUserId = preferenceManager.getString(Constants.USER_ID);
                     if (task.isSuccessful() && task.getResult() != null){
                         List<Group> groups = new ArrayList<>();
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                            if (currentUserId.equals(documentSnapshot.getId())){
-                                continue;
-                            }
                             Group group = new Group();
                             group.groupname = documentSnapshot.getString(Constants.GROUP_CHAT_NAME);
                             group.image = documentSnapshot.getString(Constants.GROUP_CHAT_IMAGE);

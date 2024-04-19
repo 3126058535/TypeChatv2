@@ -56,7 +56,11 @@ dependencies {
     implementation libs.multidex
 
     //Retrofit
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
+    implementation libs.retrofit
+    implementation libs.converter.scalars
 
+
+    implementation libs.android.mail
+    //cardview
+    implementation libs.material.v140
 }

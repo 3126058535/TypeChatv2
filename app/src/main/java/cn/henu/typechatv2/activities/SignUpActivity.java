@@ -1,5 +1,6 @@
 package cn.henu.typechatv2.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,15 +25,18 @@ import java.io.FileNotFoundException;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Random;
 
 import cn.henu.typechatv2.databinding.ActivitySignUpBinding;
 import cn.henu.typechatv2.utilities.Constants;
 import cn.henu.typechatv2.utilities.PreferenceManager;
+import cn.henu.typechatv2.utilities.SendMail;
 
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private PreferenceManager preferenceManager;
     private String encodedImage;
+    private String verificationCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,21 @@ public class SignUpActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pickerImage.launch(intent);
         });
+        binding.buttonsendcode.setOnClickListener(v ->{
+            sendcode(binding.inputEmail.getText().toString());
+        });
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void sendcode(String mail){
+        if (mail.isEmpty()) {
+            showToast("Please enter your email");
+            return;
+        }
+        // Generate a random six-digit number
+        verificationCode = String.format("%06d", new Random().nextInt(999999));
+        // Send the verification code to the user's email
+        new Thread(() -> SendMail.sendEmail(mail, verificationCode)).start();
     }
 
     private void showToast(String message) {
@@ -147,6 +166,10 @@ public class SignUpActivity extends AppCompatActivity {
             binding.inputConfirmPassword.setError("Passwords do not match");
             binding.inputConfirmPassword.requestFocus();
             //showToast("Passwords do not match");
+            return false;
+        } else if (!binding.inputConfirmCode.getText().toString().equals(verificationCode)) {
+            binding.inputConfirmCode.setError("Verification code does not match");
+            binding.inputConfirmCode.requestFocus();
             return false;
         } else {
             return true;

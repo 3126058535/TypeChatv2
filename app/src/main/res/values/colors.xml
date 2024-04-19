@@ -9,5 +9,6 @@
     <color name="input_background">#ECECEC</color>
     <color name="icon_background">#20FFFFFF</color>
     <color name="error">#B00020</color>
+    <color name="success">#00C853</color>
     <color name="reieved_message_background">#2E2C2C</color>
 </resources>

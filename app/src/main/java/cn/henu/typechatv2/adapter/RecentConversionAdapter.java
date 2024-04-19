@@ -14,6 +14,7 @@ import java.util.List;
 import cn.henu.typechatv2.databinding.ItemContainerRecentConversionBinding;
 import cn.henu.typechatv2.listeners.ConversionListener;
 import cn.henu.typechatv2.models.ChatMessage;
+import cn.henu.typechatv2.models.Group;
 import cn.henu.typechatv2.models.User;
 
 public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversionAdapter.ConversionViewHolder>{
@@ -54,15 +55,27 @@ public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversi
             binding = itemContainerRecentConversionBinding;
         }
         void setDta(ChatMessage chatMessage) {
-            binding.imageProfile.setImageBitmap(getConversionImage(chatMessage.conversionImage));
+           if (chatMessage.conversionImage == null) {
+
+            } else {
+                binding.imageProfile.setImageBitmap(getConversionImage(chatMessage.conversionImage));
+            }
             binding.textName.setText(chatMessage.conversionName);
             binding.textRecentMessage.setText(chatMessage.message);
             binding.getRoot().setOnClickListener(v -> {
-                User user = new User();
-                user.id = chatMessage.conversionId;
-                user.name = chatMessage.conversionName;
-                user.image = chatMessage.conversionImage;
-                conversionListener.onConversionClicked(user);
+                if (chatMessage.isGroup) {
+                    Group group = new Group();
+                    group.id = chatMessage.conversionId;
+                    group.groupname = chatMessage.conversionName;
+                    group.image = chatMessage.conversionImage;
+                    conversionListener.onGroupConversionClicked(group);
+                } else {
+                    User user = new User();
+                    user.id = chatMessage.conversionId;
+                    user.name = chatMessage.conversionName;
+                    user.image = chatMessage.conversionImage;
+                    conversionListener.onUserConversionClicked(user);
+                }
             });
         }
 
