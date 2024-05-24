@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Patterns;
@@ -37,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private String encodedImage;
     private String verificationCode;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,24 @@ public class SignUpActivity extends AppCompatActivity {
         verificationCode = String.format("%06d", new Random().nextInt(999999));
         // Send the verification code to the user's email
         new Thread(() -> SendMail.sendEmail(mail, verificationCode)).start();
+
+        // Disable the send code button and start a 1 minute countdown
+        binding.buttonsendcode.setEnabled(false);
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+        countDownTimer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                binding.buttonsendcode.setText(String.format("%ds", millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                binding.buttonsendcode.setEnabled(true);
+                binding.buttonsendcode.setText("Send Code");
+            }
+        }.start();
     }
 
     private void showToast(String message) {

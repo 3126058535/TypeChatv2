@@ -21,10 +21,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         binding = ActivityGroupInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
-
-
     }
-
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> finish());
         binding.enter.setOnClickListener(v -> finish());

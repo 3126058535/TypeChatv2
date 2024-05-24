@@ -34,6 +34,11 @@ public class UserActivity extends BaseActivity implements UserListener{
     }
     private void setlisteners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
+        binding.AI.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
     private void getUsers(){
         loading(true);

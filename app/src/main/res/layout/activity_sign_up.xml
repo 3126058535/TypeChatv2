@@ -129,7 +129,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:textStyle="bold"
                 android:textSize="@dimen/_13sdp"
-                android:text="@string/confirm"
+                android:text="@string/send_code"
                 app:cornerRadius="@dimen/_8sdp"/>
         </LinearLayout>
 

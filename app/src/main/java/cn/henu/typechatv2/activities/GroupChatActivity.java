@@ -186,7 +186,6 @@ public class GroupChatActivity extends AppCompatActivity {
                 Constants.LAST_MESSAGE, message,
                 Constants.TIMESTAMP, new Date()
         );
-
     }
     private void checkForConversionRemotely(String receiverId) {
         database.collection(Constants.COLLECTION_CONVERSIONS)
