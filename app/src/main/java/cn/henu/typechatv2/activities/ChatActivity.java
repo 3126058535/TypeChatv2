@@ -25,12 +25,20 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.vertexai.FirebaseVertexAI;
+import com.google.firebase.vertexai.GenerativeModel;
+import com.google.firebase.vertexai.java.GenerativeModelFutures;
+import com.google.firebase.vertexai.type.Content;
+import com.google.firebase.vertexai.type.GenerateContentResponse;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import cn.henu.typechatv2.R;
 import cn.henu.typechatv2.adapter.ChatAdapter;
@@ -64,7 +73,8 @@ public class ChatActivity extends BaseActivity {
     private String conversionId = null;
     private Boolean isReceiverAvailable = false;
     private String userid;
-
+    private String AI_USER_ID = "0kOlhOds3VGeogGZMVAC";
+    private Executor executor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +113,36 @@ public class ChatActivity extends BaseActivity {
         message.put(Constants.TIMESTAMP, System.currentTimeMillis());
         message.put(Constants.IS_GROUP_CONVERSATION, false);
         database.collection(Constants.CHAT_COLLECTION).add(message);
+
+//        // 检查消息的接收者是否是AI账号
+//        if (receiverUser.id.equals(AI_USER_ID)) {
+//            // 如果是AI账号，调用Gemini的接口获取回复
+//            ListenableFuture<GenerateContentResponse> response = callGeminiApi(inputMessage);
+//            // 检查返回的ListenableFuture对象是否为null
+//            if (response == null) {
+//                Toast.makeText(ChatActivity.this, "Failed to call Gemini API", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            // 添加一个回调函数，当Gemini的回复准备好时，将其作为一个新的消息发送出去
+//            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+//                @Override
+//                public void onSuccess(GenerateContentResponse result) {
+//                    String geminiReply = result.getText();
+//                    HashMap<String, Object> replyMessage = new HashMap<>();
+//                    replyMessage.put(Constants.SENDER_ID, AI_USER_ID);
+//                    replyMessage.put(Constants.RECEIVER_ID, preferenceManager.getString(Constants.USER_ID));
+//                    replyMessage.put(Constants.MESSAGE, geminiReply);
+//                    replyMessage.put(Constants.TIMESTAMP, System.currentTimeMillis());
+//                    replyMessage.put(Constants.IS_GROUP_CONVERSATION, false);
+//                    database.collection(Constants.CHAT_COLLECTION).add(replyMessage);
+//                }
+//                @Override
+//                public void onFailure(Throwable t) {
+//                    t.printStackTrace();
+//                }
+//            }, executor);
+//        }
+
         if (conversionId != null) {
             updateConversion(binding.inputMessage.getText().toString());
         } else {
@@ -120,7 +160,17 @@ public class ChatActivity extends BaseActivity {
         }
         binding.inputMessage.setText(null);
     }
+    private ListenableFuture<GenerateContentResponse> callGeminiApi(String message) {
+        GenerativeModel gm = FirebaseVertexAI.getInstance()
+                .generativeModel("gemini-1.5-flash-preview-0514");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
+        Content prompt = new Content.Builder()
+                .addText(message)
+                .build();
+
+        return model.generateContent(prompt);
+    }
     private void listenAvailability() {
         database.collection(Constants.USERS_COLLECTION)
                 .document(receiverUser.id)

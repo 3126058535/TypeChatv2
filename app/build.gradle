@@ -64,9 +64,12 @@ dependencies {
     implementation libs.material.v140
 
 
-    implementation(libs.firebase.vertexai)
+    implementation libs.firebase.vertexai
 
-    implementation(libs.guava)
+    implementation libs.guava
 
-    implementation(libs.reactive.streams)
+    implementation libs.reactive.streams
+
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
 }

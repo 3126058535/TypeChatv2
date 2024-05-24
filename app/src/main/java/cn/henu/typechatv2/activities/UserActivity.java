@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.henu.typechatv2.adapter.UsersAdapter;
+import cn.henu.typechatv2.chatwithai.chatAI;
 import cn.henu.typechatv2.databinding.ActivityUserBinding;
 import cn.henu.typechatv2.models.User;
 import cn.henu.typechatv2.utilities.Constants;
@@ -35,7 +36,7 @@ public class UserActivity extends BaseActivity implements UserListener{
     private void setlisteners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
         binding.btnGemmini.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ChatWithGemini.class);
+            Intent intent = new Intent(this, chatAI.class);
             startActivity(intent);
             finish();
         });

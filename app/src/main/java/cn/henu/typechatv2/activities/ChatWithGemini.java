@@ -38,21 +38,17 @@ public class ChatWithGemini extends AppCompatActivity {
         binding = ActivityChatWithGeminiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         executor = Executors.newSingleThreadExecutor();
-        Init();
-        //startChatWithAI();
+        startChatWithAI();
     }
 
-    private void Init() {
-        // Initialize the Vertex AI service and the generative model
-// Specify a model that supports your use case
-// Gemini 1.5 models are versatile and can be used with all API capabilities
+    private void startChatWithAI() {
         GenerativeModel gm = FirebaseVertexAI.getInstance()
                 .generativeModel("gemini-1.5-flash-preview-0514");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
 
         Content prompt = new Content.Builder()
-                .addText("Write a story about a magic backpack.")
+                .addText("who u are?")
                 .build();
 
         ListenableFuture<GenerateContentResponse> response = model.generateContent(prompt);
@@ -63,12 +59,10 @@ public class ChatWithGemini extends AppCompatActivity {
                 Log.d(TAG, "onSuccess: "+resultText);
                 System.out.println(resultText);
             }
-
             @Override
             public void onFailure(Throwable t) {
                 t.printStackTrace();
             }
         }, executor);
-
     }
 }

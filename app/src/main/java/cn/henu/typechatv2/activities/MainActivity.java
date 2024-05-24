@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -22,7 +21,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,6 +31,7 @@ import cn.henu.typechatv2.models.ChatMessage;
 import cn.henu.typechatv2.models.Group;
 import cn.henu.typechatv2.models.User;
 import cn.henu.typechatv2.utilities.Constants;
+import cn.henu.typechatv2.utilities.NotificationHelper;
 import cn.henu.typechatv2.utilities.PreferenceManager;
 
 public class MainActivity extends BaseActivity implements ConversionListener {
@@ -120,6 +119,9 @@ public class MainActivity extends BaseActivity implements ConversionListener {
                     chatMessage.message = documentChange.getDocument().getString(Constants.LAST_MESSAGE);
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.TIMESTAMP);
                     conversations.add(chatMessage);
+
+                    NotificationHelper.displayNotification(this, chatMessage.conversionName, chatMessage.message);
+
                 } else if( documentChange.getType() == DocumentChange.Type.MODIFIED){
 
                     for(int i = 0; i < conversations.size(); i++){
