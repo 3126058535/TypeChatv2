@@ -1,7 +1,10 @@
 [versions]
 agp = "8.3.0"
 androidMail = "1.6.5"
-firebaseBom = "32.8.0"
+firebaseBom = "33.0.0"
+firebaseCommon = "21.0.0"
+firebaseVertexai = "16.0.0-beta01"
+guava = "32.0.1-android"
 javaxMail = "1.6.2"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -12,19 +15,23 @@ activity = "1.8.0"
 constraintlayout = "2.1.4"
 materialVersion = "1.4.0"
 multidex = "2.0.1"
+reactiveStreams = "1.0.4"
 retrofit = "2.9.0"
 roundedimageview = "2.3.0"
 sdpAndroid = "1.0.6"
 sspAndroid = "1.0.6"
 googleServices = "4.4.1"
 firebaseMessaging = "23.4.1"
-firebaseFirestore = "24.11.0"
+firebaseFirestore = "25.0.0"
 
 [libraries]
 android-activation = { module = "com.sun.mail:android-activation", version.ref = "androidMail" }
 android-mail = { module = "com.sun.mail:android-mail", version.ref = "androidMail" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-common = { module = "com.google.firebase:firebase-common", version.ref = "firebaseCommon" }
+firebase-vertexai = { module = "com.google.firebase:firebase-vertexai", version.ref = "firebaseVertexai" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMail" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -35,6 +42,7 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material-v140 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
+reactive-streams = { module = "org.reactivestreams:reactive-streams", version.ref = "reactiveStreams" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 roundedimageview = { module = "com.makeramen:roundedimageview", version.ref = "roundedimageview" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }

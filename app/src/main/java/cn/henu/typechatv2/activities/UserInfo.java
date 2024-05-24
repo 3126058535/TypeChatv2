@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Base64;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentReference;
@@ -40,11 +43,10 @@ public class UserInfo extends AppCompatActivity {
     }
 
     private void loadUserDetails() {
+        loadUserDetails1();
         if (preferenceManager.getString(Constants.USER_ID).equals(userId)) {
-            loadUserDetails2();
             binding.logout.setVisibility(View.VISIBLE);
         } else {
-            loadUserDetails1();
             binding.logout.setVisibility(View.INVISIBLE);
         }
     }
@@ -61,6 +63,10 @@ public class UserInfo extends AppCompatActivity {
                     binding.nickname.setText(documentSnapshot.getString(Constants.USER_NAME));
                     binding.mail.setText(documentSnapshot.getString(Constants.USER_EMAIL));
                     binding.nickname2.setText(documentSnapshot.getString(Constants.USER_NAME));
+                    binding.instruction.setText(documentSnapshot.getString(Constants.USER_ABOUT));
+                    binding.age1.setText(documentSnapshot.getString(Constants.USER_AGE));
+                    binding.gender1.setText(documentSnapshot.getString(Constants.USER_GENDER));
+                    binding.dob1.setText(documentSnapshot.getString(Constants.USER_BIRTHDAY));
                     binding.id.setText(documentSnapshot.getId());
                     byte[] bytes = Base64.decode(documentSnapshot.getString(Constants.USER_IMAGE), Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -87,9 +93,49 @@ public class UserInfo extends AppCompatActivity {
     }
 
     private void setlisteners() {
-        binding.logout.setOnClickListener(v -> signout());
-    }
+        if (preferenceManager.getString(Constants.USER_ID).equals(userId)) {
+            binding.logout.setOnClickListener(v -> signout());
+            binding.username.setOnClickListener(v -> showUpdateDialog(Constants.USER_NAME, binding.nickname.getText().toString()));
+            binding.about.setOnClickListener(v -> showUpdateDialog(Constants.USER_ABOUT, binding.instruction.getText().toString()));
+            binding.age.setOnClickListener(v -> showUpdateDialog(Constants.USER_AGE, binding.age1.getText().toString()));
+            binding.gender.setOnClickListener(v -> showUpdateDialog(Constants.USER_GENDER, binding.gender1.getText().toString()));
+            binding.dob.setOnClickListener(v -> showUpdateDialog(Constants.USER_BIRTHDAY, binding.dob1.getText().toString()));
+            binding.logout.setVisibility(View.VISIBLE);
+        } else {
+            binding.logout.setVisibility(View.INVISIBLE);
+        }
 
+
+    }
+    private void showUpdateDialog(String key, String oldValue) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Update " + key);
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(oldValue);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", (dialog, which) -> updateUserInfo(key, input.getText().toString()));
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+    private void updateUserInfo(String key, String newValue) {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        DocumentReference documentReference =
+                database.collection(Constants.USERS_COLLECTION).document(
+                        preferenceManager.getString(Constants.USER_ID)
+                );
+        documentReference.update(key, newValue)
+                .addOnSuccessListener(unused -> {
+                    // 更新成功，重新加载用户信息
+                    loadUserDetails();
+                })
+                .addOnFailureListener(e -> showToast("Unable to update " + key));
+    }
     private void signout(){
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =

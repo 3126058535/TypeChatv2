@@ -34,8 +34,8 @@ public class UserActivity extends BaseActivity implements UserListener{
     }
     private void setlisteners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
-        binding.AI.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        binding.btnGemmini.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ChatWithGemini.class);
             startActivity(intent);
             finish();
         });

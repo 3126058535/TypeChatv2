@@ -63,9 +63,9 @@ public class MainActivity extends BaseActivity implements ConversionListener {
 
     private void setlisteners() {
         binding.imageLogout.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), ShowAPP.class)));
-        binding.fabNewUser.setOnClickListener(v ->
+        binding.bdfriends.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), UserActivity.class)));
-        binding.buttonToGroupChat.setOnClickListener(v ->
+        binding.bdgroups.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), GroupActivity.class)));
         Intent intent = new Intent(this, UserInfo.class);
         intent.putExtra(Constants.USER_ID, preferenceManager.getString(Constants.USER_ID)); // userId 是你要显示的用户的ID

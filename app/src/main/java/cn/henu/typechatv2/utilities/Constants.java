@@ -12,6 +12,12 @@ public class Constants {
     public static final String USER_IS_SIGNED_IN = "isSignedIn";
     public static final String USER_ID = "userId";
     public static final String USER_IMAGE = "userImage";
+    public static final String USER_ABOUT = "userAbout";
+    public static final String USER_AGE = "userAge";
+    public static final String USER_BIRTHDAY = "userBirthday";
+    public static final String USER_GENDER = "userGender";
+
+
     public static final String FCM_TOKEN = "token";
     public static final String USER = "user";
     public static final String CHAT_COLLECTION = "chats";

@@ -102,6 +102,7 @@
             app:cardCornerRadius="10dp">
 
             <LinearLayout
+                android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -112,6 +113,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp">
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
@@ -166,6 +168,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -193,6 +196,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -208,7 +212,7 @@
                         android:layout_alignParentStart="true"
                         android:textStyle="bold"/>
                     <TextView
-                        android:id="@+id/gender"
+                        android:id="@+id/gender1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#6E6C6C"
@@ -220,6 +224,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -235,11 +240,11 @@
                         android:layout_alignParentStart="true"
                         android:textStyle="bold"/>
                     <TextView
-                        android:id="@+id/age"
+                        android:id="@+id/age1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#6E6C6C"
-                        android:text="1"
+                        android:text="18"
                         android:fontFamily="@font/poppinsmedium"
                         android:textSize="15sp"
                         android:layout_alignParentEnd="true"
@@ -247,6 +252,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -262,7 +268,7 @@
                         android:layout_alignParentStart="true"
                         android:textStyle="bold"/>
                     <TextView
-                        android:id="@+id/dob"
+                        android:id="@+id/dob1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#6E6C6C"

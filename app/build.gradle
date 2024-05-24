@@ -59,8 +59,14 @@ dependencies {
     implementation libs.retrofit
     implementation libs.converter.scalars
 
-
     implementation libs.android.mail
     //cardview
     implementation libs.material.v140
+
+
+    implementation(libs.firebase.vertexai)
+
+    implementation(libs.guava)
+
+    implementation(libs.reactive.streams)
 }

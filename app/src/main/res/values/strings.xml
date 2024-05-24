@@ -25,4 +25,6 @@
     <string name="logout">logout</string>
     <string name="info">This is a cool app that lets you chat with friends.This is a cool app that lets you chat with friends.This is a cool app that lets you chat with friends.</string>
     <string name="send_code">Send Code</string>
+    <string name="fu">发现好友</string>
+    <string name="fg">发现群组</string>
 </resources>
