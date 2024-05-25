@@ -12,7 +12,7 @@
     <string name="sign_up">sign up</string>
     <string name="select_user">Select User</string>
     <string name="no_user_found">No user found</string>
-    <string name="type_a_message">type a message</string>
+    <string name="type_a_message">  type a message</string>
     <string name="online">online</string>
     <string name="select_group">select group</string>
     <string name="create_an_group_chat">create an group chat</string>

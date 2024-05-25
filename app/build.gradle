@@ -70,6 +70,7 @@ dependencies {
 
     implementation libs.reactive.streams
 
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation libs.converter.gson
+
 
 }

@@ -31,6 +31,8 @@ import cn.henu.typechatv2.databinding.ActivityUserInfoBinding;
 import cn.henu.typechatv2.utilities.Constants;
 import cn.henu.typechatv2.utilities.PreferenceManager;
 
+
+
 public class UserInfo extends AppCompatActivity {
     ActivityUserInfoBinding binding;
     PreferenceManager preferenceManager;
@@ -44,10 +46,8 @@ public class UserInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityUserInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         Init();
         setlisteners();
-
         loadUserDetails();
     }
 
@@ -59,6 +59,7 @@ public class UserInfo extends AppCompatActivity {
             binding.logout.setVisibility(View.INVISIBLE);
         }
     }
+
 
     private void loadUserDetails1() {
         // Get the user details from the database

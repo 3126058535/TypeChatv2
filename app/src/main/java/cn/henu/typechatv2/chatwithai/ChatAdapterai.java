@@ -64,10 +64,6 @@ public class ChatAdapterai extends RecyclerView.Adapter<ChatAdapterai.ViewHolder
             holder.imageViewAvatar2.setVisibility(View.GONE);
             holder.messageText2.setVisibility(View.GONE);
             holder.messageTime2.setVisibility(View.GONE);  // 新添加
-            //设置为当前用户头像
-            holder.imageViewAvatar.setImageResource(R.drawable.avtar);
-            holder.imageViewAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
             // 将用户的消息放在右边
             holder.messageText.setBackgroundResource(R.drawable.bg_user_message);
             holder.messageText.setText(message.getContent());

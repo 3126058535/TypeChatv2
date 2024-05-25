@@ -7,13 +7,12 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageProfile"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/background_image"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:riv_oval="true" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView
@@ -27,8 +26,8 @@
         android:paddingEnd="@dimen/_12sdp"
         android:paddingBottom="@dimen/_8sdp"
         app:layout_constraintWidth_max="wrap"
-        android:textSize="@dimen/_13sdp"
-        android:textColor="@color/white"
+        android:textSize="@dimen/_10sdp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/imageProfile"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.75"/>

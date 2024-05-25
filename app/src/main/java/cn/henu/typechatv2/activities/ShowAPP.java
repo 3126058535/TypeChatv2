@@ -1,19 +1,15 @@
 package cn.henu.typechatv2.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import cn.henu.typechatv2.R;
 import cn.henu.typechatv2.databinding.ActivityShowAppBinding;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class ShowAPP extends AppCompatActivity {
 
@@ -60,6 +56,8 @@ public class ShowAPP extends AppCompatActivity {
 //                }
             }
         });
+
+
     }
 
 }

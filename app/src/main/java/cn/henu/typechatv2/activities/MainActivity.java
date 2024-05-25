@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.TIMESTAMP);
                     conversations.add(chatMessage);
 
-                    NotificationHelper.displayNotification(this, chatMessage.conversionName, chatMessage.message);
+                    //NotificationHelper.displayNotification(this, chatMessage.conversionName, chatMessage.message);
 
                 } else if( documentChange.getType() == DocumentChange.Type.MODIFIED){
 

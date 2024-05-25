@@ -12,8 +12,7 @@
         android:background="@drawable/background_image"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:riv_oval="true"/>
+        app:layout_constraintTop_toTopOf="parent" />
     <View
         android:id="@+id/viewSuppport"
         android:layout_width="1dp"

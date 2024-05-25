@@ -16,8 +16,8 @@
 
     <ImageView
         android:id="@+id/imageViewAvatar2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:maxWidth="248dp"
         android:minWidth="10dp"
-        android:background="#B3E5FC"
+        android:background="#B2E4FB"
         android:padding="8dp"
         android:layout_toEndOf="@+id/imageViewAvatar"
         android:layout_gravity="center_horizontal" />

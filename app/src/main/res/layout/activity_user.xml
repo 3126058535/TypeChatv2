@@ -115,8 +115,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_24sdp"
         android:layout_marginBottom="@dimen/_24sdp"
-        android:backgroundTint="@color/primary"
-        android:src="@drawable/ic_add"
+        android:backgroundTint="#7E9764"
+        android:src="@drawable/ai_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:tint="@color/white"/>
