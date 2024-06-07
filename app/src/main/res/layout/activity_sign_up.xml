@@ -116,7 +116,6 @@
                 android:background="@drawable/background_input"
                 android:hint="@string/confirm_code"
                 android:imeOptions="actionDone"
-                android:inputType="textPassword"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
                 android:textColor="@color/primary_text"

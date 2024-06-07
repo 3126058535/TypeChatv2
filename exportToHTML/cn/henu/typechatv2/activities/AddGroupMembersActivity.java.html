@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>AddGroupMembersActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AddGroupMembersActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">activities</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.</span><span class="s1">SuppressLint</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Intent</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">os</span><span class="s2">.</span><span class="s1">Bundle</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">View</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">Toast</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">appcompat</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">AppCompatActivity</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">google</span><span class="s2">.</span><span class="s1">firebase</span><span class="s2">.</span><span class="s1">firestore</span><span class="s2">.</span><span class="s1">FirebaseFirestore</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">google</span><span class="s2">.</span><span class="s1">firebase</span><span class="s2">.</span><span class="s1">firestore</span><span class="s2">.</span><span class="s1">QueryDocumentSnapshot</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">adapter</span><span class="s2">.</span><span class="s1">AddGroupMembersAdapter</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">databinding</span><span class="s2">.</span><span class="s1">ActivityAddGroupMembersBinding</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">listeners</span><span class="s2">.</span><span class="s1">OnMemberAddedListener</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">User</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">utilities</span><span class="s2">.</span><span class="s1">Constants</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">cn</span><span class="s2">.</span><span class="s1">henu</span><span class="s2">.</span><span class="s1">typechatv2</span><span class="s2">.</span><span class="s1">utilities</span><span class="s2">.</span><span class="s1">PreferenceManager</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">AddGroupMembersActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity </span><span class="s0">implements </span><span class="s1">OnMemberAddedListener </span><span class="s2">{</span>
+    <span class="s0">private </span><span class="s1">ActivityAddGroupMembersBinding binding</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">PreferenceManager preferenceManager</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">FirebaseFirestore database</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">User</span><span class="s2">&gt; </span><span class="s1">SelectMembers</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">AddGroupMembersAdapter adapter</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">Bundle savedInstanceState</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">savedInstanceState</span><span class="s2">);</span>
+        <span class="s1">binding </span><span class="s2">= </span><span class="s1">ActivityAddGroupMembersBinding</span><span class="s2">.</span><span class="s1">inflate</span><span class="s2">(</span><span class="s1">getLayoutInflater</span><span class="s2">());</span>
+        <span class="s1">setContentView</span><span class="s2">(</span><span class="s1">binding</span><span class="s2">.</span><span class="s1">getRoot</span><span class="s2">());</span>
+        <span class="s1">SelectMembers </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;(); </span><span class="s3">// 初始化 addedMembers</span>
+        <span class="s1">preferenceManager </span><span class="s2">= </span><span class="s0">new </span><span class="s1">PreferenceManager</span><span class="s2">(</span><span class="s1">getApplicationContext</span><span class="s2">());</span>
+        <span class="s1">database </span><span class="s2">= </span><span class="s1">FirebaseFirestore</span><span class="s2">.</span><span class="s1">getInstance</span><span class="s2">();</span>
+        <span class="s1">setListeners</span><span class="s2">();</span>
+        <span class="s1">loadUsers</span><span class="s2">();</span>
+    <span class="s2">}</span>
+    <span class="s0">private void </span><span class="s1">loadUsers</span><span class="s2">() {</span>
+        <span class="s1">loading</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s1">database</span><span class="s2">.</span><span class="s1">collection</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">USERS_COLLECTION</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">get</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">addOnCompleteListener</span><span class="s2">(</span><span class="s1">task -&gt; </span><span class="s2">{</span>
+                    <span class="s1">loading</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+                    <span class="s1">String currentUserId </span><span class="s2">= </span><span class="s1">preferenceManager</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">USER_ID</span><span class="s2">);</span>
+                    <span class="s0">if </span><span class="s2">(</span><span class="s1">task</span><span class="s2">.</span><span class="s1">isSuccessful</span><span class="s2">() &amp;&amp; </span><span class="s1">task</span><span class="s2">.</span><span class="s1">getResult</span><span class="s2">() != </span><span class="s0">null</span><span class="s2">){</span>
+                        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">User</span><span class="s2">&gt; </span><span class="s1">users </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+                        <span class="s0">for </span><span class="s2">(</span><span class="s1">QueryDocumentSnapshot documentSnapshot </span><span class="s2">: </span><span class="s1">task</span><span class="s2">.</span><span class="s1">getResult</span><span class="s2">()){</span>
+                            <span class="s0">if </span><span class="s2">(</span><span class="s1">currentUserId</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">documentSnapshot</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">())){</span>
+                                <span class="s0">continue</span><span class="s2">;</span>
+                            <span class="s2">}</span>
+                            <span class="s1">User user </span><span class="s2">= </span><span class="s0">new </span><span class="s1">User</span><span class="s2">();</span>
+                            <span class="s1">user</span><span class="s2">.</span><span class="s1">name </span><span class="s2">= </span><span class="s1">documentSnapshot</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">USER_NAME</span><span class="s2">);</span>
+                            <span class="s1">user</span><span class="s2">.</span><span class="s1">email </span><span class="s2">= </span><span class="s1">documentSnapshot</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">USER_EMAIL</span><span class="s2">);</span>
+                            <span class="s1">user</span><span class="s2">.</span><span class="s1">image </span><span class="s2">= </span><span class="s1">documentSnapshot</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">USER_IMAGE</span><span class="s2">);</span>
+                            <span class="s1">user</span><span class="s2">.</span><span class="s1">token </span><span class="s2">= </span><span class="s1">documentSnapshot</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">FCM_TOKEN</span><span class="s2">);</span>
+                            <span class="s1">user</span><span class="s2">.</span><span class="s1">id </span><span class="s2">= </span><span class="s1">documentSnapshot</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">();</span>
+                            <span class="s1">users</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">user</span><span class="s2">);</span>
+                        <span class="s2">}</span>
+                        <span class="s0">if </span><span class="s2">(!</span><span class="s1">users</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()){</span>
+                            <span class="s1">binding</span><span class="s2">.</span><span class="s1">textNoUserFound</span><span class="s2">.</span><span class="s1">setVisibility</span><span class="s2">(</span><span class="s1">View</span><span class="s2">.</span><span class="s1">GONE</span><span class="s2">);</span>
+                            <span class="s1">binding</span><span class="s2">.</span><span class="s1">userRecyclerView</span><span class="s2">.</span><span class="s1">setVisibility</span><span class="s2">(</span><span class="s1">View</span><span class="s2">.</span><span class="s1">VISIBLE</span><span class="s2">);</span>
+                            <span class="s1">adapter </span><span class="s2">= </span><span class="s0">new </span><span class="s1">AddGroupMembersAdapter</span><span class="s2">(</span><span class="s1">users</span><span class="s2">, </span><span class="s1">AddGroupMembersActivity</span><span class="s2">.</span><span class="s0">this</span><span class="s2">);</span>
+                            <span class="s1">binding</span><span class="s2">.</span><span class="s1">userRecyclerView</span><span class="s2">.</span><span class="s1">setAdapter</span><span class="s2">(</span><span class="s1">adapter</span><span class="s2">);</span>
+                        <span class="s2">}</span>
+                    <span class="s2">}</span>
+                <span class="s2">});</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">setListeners</span><span class="s2">() {</span>
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">imageBack</span><span class="s2">.</span><span class="s1">setOnClickListener</span><span class="s2">(</span><span class="s1">v -&gt; onBackPressed</span><span class="s2">());</span>
+        <span class="s1">binding</span><span class="s2">.</span><span class="s1">confirmButton</span><span class="s2">.</span><span class="s1">setOnClickListener</span><span class="s2">(</span><span class="s1">v -&gt; </span><span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">SelectMembers</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()){</span>
+                <span class="s1">Intent intent </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Intent</span><span class="s2">();</span>
+                <span class="s1">intent</span><span class="s2">.</span><span class="s1">putExtra</span><span class="s2">(</span><span class="s1">Constants</span><span class="s2">.</span><span class="s1">GROUP_CHAT_MEMBERS</span><span class="s2">, (</span><span class="s1">CharSequence</span><span class="s2">) </span><span class="s1">SelectMembers</span><span class="s2">);</span>
+                <span class="s1">setResult</span><span class="s2">(</span><span class="s1">RESULT_OK</span><span class="s2">, </span><span class="s1">intent</span><span class="s2">);</span>
+                <span class="s1">finish</span><span class="s2">();</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">Toast</span><span class="s2">.</span><span class="s1">makeText</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s4">&quot;Select at least one member&quot;</span><span class="s2">, </span><span class="s1">Toast</span><span class="s2">.</span><span class="s1">LENGTH_SHORT</span><span class="s2">).</span><span class="s1">show</span><span class="s2">();</span>
+            <span class="s2">}</span>
+        <span class="s2">});</span>
+    <span class="s2">}</span>
+    <span class="s0">private void </span><span class="s1">loading</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">isLoading</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">isLoading</span><span class="s2">) {</span>
+            <span class="s1">binding</span><span class="s2">.</span><span class="s1">progressBar</span><span class="s2">.</span><span class="s1">setVisibility</span><span class="s2">(</span><span class="s1">View</span><span class="s2">.</span><span class="s1">VISIBLE</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">binding</span><span class="s2">.</span><span class="s1">progressBar</span><span class="s2">.</span><span class="s1">setVisibility</span><span class="s2">(</span><span class="s1">View</span><span class="s2">.</span><span class="s1">INVISIBLE</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@SuppressLint</span><span class="s2">(</span><span class="s4">&quot;NotifyDataSetChanged&quot;</span><span class="s2">)</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onMemberAdded</span><span class="s2">(</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">User</span><span class="s2">&gt; </span><span class="s1">users</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">SelectMembers </span><span class="s2">= </span><span class="s1">users</span><span class="s2">;</span>
+        <span class="s1">adapter</span><span class="s2">.</span><span class="s1">notifyDataSetChanged</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-25T06:10:26.738552100Z">
+        <DropdownSelection timestamp="2024-06-06T23:49:20.315198200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=64bdece4" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\gloomy\.android\avd\Pixel_3a_API_33.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,12 +15,12 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="PhysicalDevice" identifier="serial=64bdece4" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\gloomy\.android\avd\Pixel_3a_API_34.avd" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\lenovo\.android\avd\Pixel_4a_API_31.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\gloomy\.android\avd\Pixel_3a_API_33.avd" />
               </handle>
             </Target>
           </targets>
