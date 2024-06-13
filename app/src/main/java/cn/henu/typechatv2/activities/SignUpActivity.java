@@ -61,7 +61,17 @@ public class SignUpActivity extends AppCompatActivity {
             pickerImage.launch(intent);
         });
         binding.buttonsendcode.setOnClickListener(v ->{
-            sendcode(binding.inputEmail.getText().toString());
+            checkEmailValidity(new EmailValidationCallback() {
+                @Override
+                public void onCallback(boolean isEmailValid) {
+                    if (isEmailValid) {
+                        sendcode(binding.inputEmail.getText().toString());
+                    } else {
+                        showToast("邮箱已存在");
+                    }
+                }
+            });
+
         });
     }
 
@@ -71,12 +81,9 @@ public class SignUpActivity extends AppCompatActivity {
             showToast("Please enter your email");
             return;
         }
-        // Generate a random six-digit number
         verificationCode = String.format("%06d", new Random().nextInt(999999));
-        // Send the verification code to the user's email
         new Thread(() -> SendMail.sendEmail(mail, verificationCode)).start();
 
-        // Disable the send code button and start a 1 minute countdown
         binding.buttonsendcode.setEnabled(false);
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -86,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 binding.buttonsendcode.setText(String.format("%ds", millisUntilFinished / 1000));
             }
-
             @Override
             public void onFinish() {
                 binding.buttonsendcode.setEnabled(true);
@@ -97,6 +103,27 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+    interface EmailValidationCallback {
+        void onCallback(boolean isEmailValid);
+    }
+
+    private void checkEmailValidity(EmailValidationCallback callback) {
+        String email = binding.inputEmail.getText().toString();
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.collection(Constants.USERS_COLLECTION)
+                .whereEqualTo(Constants.USER_EMAIL, email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().isEmpty()) {
+                        // 电子邮件地址在数据库中不存在，可以进行注册
+                        callback.onCallback(true);
+                    } else {
+                        // 电子邮件地址在数据库中已存在，提示用户选择其他的电子邮件地址
+                        showToast("邮箱已存在");
+                        callback.onCallback(false);
+                    }
+                });
     }
     private void signUp(){
         loading(true);

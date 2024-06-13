@@ -22,7 +22,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewGroupHol
         this.groups = groups;
         this.groupListener = userListener;
     }
-
     @NonNull
     @Override
     public ViewGroupHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

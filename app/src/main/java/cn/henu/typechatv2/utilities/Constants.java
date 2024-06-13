@@ -16,8 +16,6 @@ public class Constants {
     public static final String USER_AGE = "userAge";
     public static final String USER_BIRTHDAY = "userBirthday";
     public static final String USER_GENDER = "userGender";
-
-
     public static final String FCM_TOKEN = "token";
     public static final String USER = "user";
     public static final String CHAT_COLLECTION = "chats";
@@ -32,7 +30,6 @@ public class Constants {
     public static final String RECEIVER_IMAGE = "receiverImage";
     public static final String LAST_MESSAGE = "lastMessage";
     public static final String USER_AVAILABILITY = "userAvailability";
-    // Constants.java
     public static final String GROUP_CHAT_COLLECTION = "groupchats";
     public static final String GROUP_COLLECTION = "groups";
     public static final String GROUP = "group";
@@ -43,14 +40,8 @@ public class Constants {
     public static final String GROUP_CHAT_CREATED_BY = "created_by";
     public static final String GROUP_CHAT_TIMESTAMP = "timestamp";
     public static final String GROUP_CHAT_ID = "group_chat_id";
-
-
    // public static final String MESSAGE_TYPE = "messageType";
-
     public static final String IS_GROUP_CONVERSATION = "isGroup";
-
-
-
 }
 
 

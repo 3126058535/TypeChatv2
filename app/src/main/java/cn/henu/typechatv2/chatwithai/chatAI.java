@@ -3,6 +3,7 @@ package cn.henu.typechatv2.chatwithai;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.henu.typechatv2.R;
+import cn.henu.typechatv2.utilities.Constants;
+import cn.henu.typechatv2.utilities.PreferenceManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +27,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class chatAI extends AppCompatActivity {
-
     private EditText userInput;
     private RecyclerView recyclerViewChat;
     private ChatAdapterai chatAdapter;
@@ -33,7 +35,8 @@ public class chatAI extends AppCompatActivity {
     private Button send;
     private MessageDatabaseHelper messageDatabaseHelper;
     String currentTime = timeUtils.getCurrentTime();
-
+    private String userId;
+    private PreferenceManager preferenceManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,15 +53,18 @@ public class chatAI extends AppCompatActivity {
 
         // Initialize Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://123.57.181.11:5000")  // 修改为你的 Flask 服务器 IP
+                .baseUrl("http://123.57.181.11:5000")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         // Create service interface instance
         apiService = retrofit.create(ApiServiceai.class);
 
-        // Initialize MessageDatabaseHelper
+        preferenceManager = new PreferenceManager(getApplicationContext());
+        userId = preferenceManager.getString(Constants.USER_ID);
+        Log.d("chatai", "onCreate: "+userId);
         messageDatabaseHelper = new MessageDatabaseHelper(this);
+        messageDatabaseHelper.createUserTable(userId);
 
         send = findViewById(R.id.buttonSendMessage);
         send.setOnClickListener(new View.OnClickListener() {
@@ -71,50 +77,28 @@ public class chatAI extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Load messages from SQLite database
         loadMessagesFromDatabase();
     }
     private void loadMessagesFromDatabase() {
-        // Clear existing messages
         messages.clear();
-
-        // Load messages from SQLite database
-        List<String> savedMessages = messageDatabaseHelper.getAllMessages();
-        boolean isCurrentUserMessage = true; // Track whether the current message is sent by the user or the server
+        List<String> savedMessages = messageDatabaseHelper.getAllMessages(userId);
+        boolean isCurrentUserMessage = true;
         for (String message : savedMessages) {
-            // Create Message objects from saved messages and add to the list
             messages.add(new Messageai(message, isCurrentUserMessage, currentTime));
-            // Toggle between user and server messages
             isCurrentUserMessage = !isCurrentUserMessage;
         }
-
-        // Refresh RecyclerView
         chatAdapter.notifyDataSetChanged();
-
-        // Scroll to the last message
         recyclerViewChat.scrollToPosition(messages.size() - 1);
     }
     public void onSendMessageClick(View view) {
         String messageContent = userInput.getText().toString();
         Messageai userMessage = new Messageai(messageContent, true, currentTime);
         messages.add(userMessage);
-
-        // Save message to SQLite database
-        messageDatabaseHelper.addMessage(messageContent);
-
-        // Refresh RecyclerView
+        messageDatabaseHelper.addMessage(userId,messageContent);
         chatAdapter.notifyDataSetChanged();
-
-        // Scroll to the last message
         recyclerViewChat.scrollToPosition(messages.size() - 1);
-
-        // Clear the input box
         userInput.setText("");
-
-        // Create a request object
         ChatRequest request = new ChatRequest(messageContent);
-
-        // Send the request
         Call<ChatResponse> call = apiService.sendMessage(request);
         call.enqueue(new Callback<ChatResponse>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -125,44 +109,28 @@ public class chatAI extends AppCompatActivity {
                     String serverResponse = response.body().getAnswer();
                     Messageai serverMessage = new Messageai(serverResponse, false, currentTime);
                     messages.add(serverMessage);
-
-                    // Save server message to SQLite database
-                    messageDatabaseHelper.addMessage(serverResponse);
-
-                    // Refresh RecyclerView
+                    messageDatabaseHelper.addMessage(userId, serverResponse);
                     chatAdapter.notifyDataSetChanged();
-
-                    // Scroll to the last message
                     recyclerViewChat.scrollToPosition(messages.size() - 1);
                 } else {
-                    // Handle the failed request
-                    String errorMessage = "Server Error";
+                    String errorMessage = "服务器未响应，请稍后再试";
+                    Log.e("Retrofit Request", errorMessage);
                     Messageai errorServerMessage = new Messageai(errorMessage, false, currentTime);
                     messages.add(errorServerMessage);
-
-                    // Save error message to SQLite database
-                    messageDatabaseHelper.addMessage(errorMessage);
-
-                    // Refresh RecyclerView
+                    messageDatabaseHelper.addMessage(userId, errorMessage);
                     chatAdapter.notifyDataSetChanged();
-
-                    // Scroll to the last message
                     recyclerViewChat.scrollToPosition(messages.size() - 1);
                 }
             }
 
             @Override
             public void onFailure(Call<ChatResponse> call, Throwable t) {
-                // Handle request failure
+
                 String errorMessage = "Request Failed: " + t.getMessage();
 
                 Messageai errorServerMessage = new Messageai(errorMessage, false, currentTime);
                 messages.add(errorServerMessage);
-
-                // Save error message to SQLite database
-                messageDatabaseHelper.addMessage(errorMessage);
-
-                // Refresh RecyclerView
+                messageDatabaseHelper.addMessage(userId, errorMessage);
                 chatAdapter.notifyDataSetChanged();
 
                 // Scroll to the last message

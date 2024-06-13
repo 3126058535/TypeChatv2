@@ -119,8 +119,6 @@ public class UserInfo extends AppCompatActivity {
         } else {
             binding.logout.setVisibility(View.INVISIBLE);
         }
-
-
     }
     private String encodeImage(Bitmap bitmap){
         int previewWidth = 150;

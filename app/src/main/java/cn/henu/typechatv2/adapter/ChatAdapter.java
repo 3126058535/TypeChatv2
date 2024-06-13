@@ -78,17 +78,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     static class SentMessageHolder extends RecyclerView.ViewHolder {
         private final ItemContainerSendMessageBinding binding;
         private Bitmap receiverProfileImageBitmap;
-
         SentMessageHolder(ItemContainerSendMessageBinding itemContainerSendMessageBinding) {
             super(itemContainerSendMessageBinding.getRoot());
             this.binding = itemContainerSendMessageBinding;
         }
-
         void setData(ChatMessage chatMessage) {
             binding.textmessage.setText(chatMessage.message);
             binding.texttime.setText(chatMessage.dateTime);
         }
-
     }
 
     static class ReceivedMessageHolder extends RecyclerView.ViewHolder {
@@ -104,6 +101,5 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             binding.texttime.setText(chatMessage.dateTime);
             binding.imageProfile.setImageBitmap(receiverProfileImageBitmap);
         }
-
     }
 }
